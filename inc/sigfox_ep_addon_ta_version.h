@@ -39,6 +39,6 @@
 
 /*** Main version ***/
 
-#define SIGFOX_EP_ADDON_TA_VERSION		"v1.0"
+#define SIGFOX_EP_ADDON_TA_VERSION		"v1.1"
 
 #endif /* __SIGFOX_EP_ADDON_TA_VERSION_H__ */

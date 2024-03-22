@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
 project(sigfox_ep_addon_ta)
     
-#Check if Project configure by himself or by a parent project (like sfx_lib_core_protocol)
+#Check if Project configure by himself or by a parent project (like sigfox-ep-lib)
 if ( ${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR} )
     if (NOT DEFINED  SIGFOX_EP_LIB_DIR)
-        message(FATAL_ERROR "${PROJECT_NAME} cannot be configured without -DSIGFOX_EP_LIB_DIR=<sfx_lib_core_protocol directory>")
+        message(FATAL_ERROR "${PROJECT_NAME} cannot be configured without -DSIGFOX_EP_LIB_DIR=<sigfox-ep-lib directory>")
     endif()
     set(ADDON_TA OFF)
     add_subdirectory(${SIGFOX_EP_LIB_DIR} "${CMAKE_CURRENT_BINARY_DIR}/${SIGFOX_EP_LIB_DIR}") 

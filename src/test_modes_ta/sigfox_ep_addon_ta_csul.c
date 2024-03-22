@@ -275,7 +275,7 @@ static SIGFOX_EP_ADDON_TA_API_status_t _send_uplink_frame(void) {
 	SIGFOX_EP_API_control_message_t message;
 #endif
 	SIGFOX_EP_API_TEST_parameters_t test_params;
-#if (defined UL_PAYLOAD_SIZE) && (UL_PAYLOAD_SIZE > 0)
+#if (defined APPLICATION_MESSAGES) && (defined UL_PAYLOAD_SIZE) && (UL_PAYLOAD_SIZE > 0)
 	sfx_u8 ul_payload[UL_PAYLOAD_SIZE] = {0};
 #endif
 #ifdef SPECTRUM_ACCESS_FH
@@ -328,12 +328,21 @@ static SIGFOX_EP_ADDON_TA_API_status_t _send_uplink_frame(void) {
 	message.message_cplt_cb = &_SIGFOX_EP_API_message_completion_callback;
 #endif
 #ifdef APPLICATION_MESSAGES
-#if (defined UL_PAYLOAD_SIZE) && (UL_PAYLOAD_SIZE > 0)
+#ifdef UL_PAYLOAD_SIZE
+#if (UL_PAYLOAD_SIZE == 0)
+	message.type = SIGFOX_APPLICATION_MESSAGE_TYPE_EMPTY;
+#else
 	message.type = SIGFOX_APPLICATION_MESSAGE_TYPE_BYTE_ARRAY;
-	message.ul_payload = ul_payload;
+#endif
 #else
 	message.type = SIGFOX_APPLICATION_MESSAGE_TYPE_EMPTY;
+#endif
+#if !(defined UL_PAYLOAD_SIZE) || (UL_PAYLOAD_SIZE > 0)
+#if (defined UL_PAYLOAD_SIZE) && (UL_PAYLOAD_SIZE > 0)
+	message.ul_payload = ul_payload;
+#else
 	message.ul_payload = SFX_NULL;
+#endif
 #endif
 #ifndef UL_PAYLOAD_SIZE
 	message.ul_payload_size_bytes = 0;
@@ -517,6 +526,9 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSUL_open(SIGFOX_EP_ADDON_TA_
 	sfx_u32 idx = 0;
 #endif
 #ifdef PARAMETERS_CHECK
+#ifdef SPECTRUM_ACCESS_FH
+	sfx_u8 center_frequency_check = 0;
+#endif
 	// Check parameter.
 	if (csul_test_config == SFX_NULL) {
 		EXIT_ERROR(SIGFOX_EP_ADDON_TA_API_ERROR_NULL_PARAMETER);
@@ -550,16 +562,26 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSUL_open(SIGFOX_EP_ADDON_TA_
 	// Check RC pointer in case of FH.
 	if ((csul_test_config -> rc -> spectrum_access -> type) == SIGFOX_SPECTRUM_ACCESS_TYPE_FH) {
 		// Frequency hopping mode only support pre-defined RC2 and RC4 zones.
+#ifdef RC2_ZONE
 		if ((csul_test_config -> rc -> f_ul_hz) == SIGFOX_RC2.f_ul_hz) {
 			sigfox_ep_addon_ta_csul_ctx.operated_macro_channel_index = SIGFOX_FH_RC2_OPERATED_MACRO_CHANNEL_INDEX;
 			sigfox_ep_addon_ta_csul_ctx.first_micro_channel_frequency_hz = SIGFOX_FH_RC2_FIRST_MICRO_CHANNEL_FREQUENCY_HZ;
+#ifdef PARAMETERS_CHECK
+			center_frequency_check = 1;
+#endif
 		}
-		else if ((csul_test_config -> rc -> f_ul_hz) == SIGFOX_RC4.f_ul_hz) {
+#endif
+#ifdef RC4_ZONE
+		if ((csul_test_config -> rc -> f_ul_hz) == SIGFOX_RC4.f_ul_hz) {
 			sigfox_ep_addon_ta_csul_ctx.operated_macro_channel_index = SIGFOX_FH_RC4_OPERATED_MACRO_CHANNEL_INDEX;
 			sigfox_ep_addon_ta_csul_ctx.first_micro_channel_frequency_hz = SIGFOX_FH_RC4_FIRST_MICRO_CHANNEL_FREQUENCY_HZ;
-		}
 #ifdef PARAMETERS_CHECK
-		else {
+			center_frequency_check = 1;
+#endif
+		}
+#endif
+#ifdef PARAMETERS_CHECK
+		if (center_frequency_check == 0) {
 			EXIT_ERROR(SIGFOX_EP_ADDON_TA_API_ERROR_FREQUENCY_HOPPING_RC);
 		}
 #endif

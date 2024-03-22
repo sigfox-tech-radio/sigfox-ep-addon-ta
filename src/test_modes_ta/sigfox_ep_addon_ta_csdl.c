@@ -164,7 +164,7 @@ static SIGFOX_EP_ADDON_TA_API_status_t _start_downlink_window(void) {
 #endif
 	SIGFOX_EP_API_application_message_t message;
 	SIGFOX_EP_API_TEST_parameters_t test_params;
-#if (defined UL_PAYLOAD_SIZE) && (UL_PAYLOAD_SIZE > 0)
+#if (defined APPLICATION_MESSAGES) && (defined UL_PAYLOAD_SIZE) && (UL_PAYLOAD_SIZE > 0)
 	sfx_u8 ul_payload[UL_PAYLOAD_SIZE] = {0};
 #endif
 	// Set test parameters.
@@ -197,12 +197,21 @@ static SIGFOX_EP_ADDON_TA_API_status_t _start_downlink_window(void) {
 	message.uplink_cplt_cb = SFX_NULL;
 	message.message_cplt_cb = &_SIGFOX_EP_API_message_completion_callback;
 #endif
-#if (defined UL_PAYLOAD_SIZE) && (UL_PAYLOAD_SIZE > 0)
+#ifdef UL_PAYLOAD_SIZE
+#if (UL_PAYLOAD_SIZE == 0)
+	message.type = SIGFOX_APPLICATION_MESSAGE_TYPE_EMPTY;
+#else
 	message.type = SIGFOX_APPLICATION_MESSAGE_TYPE_BYTE_ARRAY;
-	message.ul_payload = ul_payload;
+#endif
 #else
 	message.type = SIGFOX_APPLICATION_MESSAGE_TYPE_EMPTY;
+#endif
+#if !(defined UL_PAYLOAD_SIZE) || (UL_PAYLOAD_SIZE > 0)
+#if (defined UL_PAYLOAD_SIZE) && (UL_PAYLOAD_SIZE > 0)
+	message.ul_payload = ul_payload;
+#else
 	message.ul_payload = SFX_NULL;
+#endif
 #endif
 #ifndef UL_PAYLOAD_SIZE
 	message.ul_payload_size_bytes = 0;

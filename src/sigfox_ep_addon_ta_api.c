@@ -475,7 +475,7 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_API_get_version(sfx_u8 **vers
 #endif
 #ifdef PARAMETERS_CHECK
 	if ((version == SFX_NULL) || (version_size_char == SFX_NULL)) {
-		EXIT_ERROR(SIGFOX_EP_API_ERROR_NULL_PARAMETER);
+		EXIT_ERROR(SIGFOX_EP_ADDON_TA_API_ERROR_NULL_PARAMETER);
 	}
 #endif
 	// Return version.
