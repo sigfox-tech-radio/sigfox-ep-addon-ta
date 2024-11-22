@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.0](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v2.0) - 22 Nov 2024
+
+### Added
+
+* Add **new** `downlink_cplt_cb` **callback to print DL payload** when the CSDL test mode receives a valid downlink frame (`MCU_API_print_dl_payload()` function replacement).
+
+### Fixed
+
+* Remove `dl_t_rx_ms` **field check** in CSDL test mode since value 0 is valid (taking RC default value).
+* Use **RC default downlink frequency** when `rx_frequency_hz` is set to 0 in CSDL test mode.
+* Fix **bit rate setting** issue (missing conversion from enumeration to bps value).
+* Remove **unifdef dependency** in all cmake with linked target.
+
+### Changed
+
+* Upgrade to **sigfox-ep-lib v4.0**.
+* Add **_t** suffix to all functions typedef.
+
 ## [v1.1](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v1.1) - 22 Mar 2024
 
 ### Fixed
@@ -17,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Rename `RCx` compilation flags into `RCx_ZONE` for **Microchip MCUs compatibility**.
+* Rename `RCx` compilation flags to `RCx_ZONE` for **Microchip MCUs compatibility**.
 
 ## [v1.0](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v1.0) - 09 Nov 2023
 

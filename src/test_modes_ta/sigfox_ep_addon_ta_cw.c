@@ -36,7 +36,7 @@
 
 #include "test_modes_ta/sigfox_ep_addon_ta_cw.h"
 
-#ifdef USE_SIGFOX_EP_FLAGS_H
+#ifndef SIGFOX_EP_DISABLE_FLAGS_FILE
 #include "sigfox_ep_flags.h"
 #endif
 #include "sigfox_ep_addon_ta_api.h"
@@ -47,9 +47,9 @@
 /*** SIGFOX EP ADDON TA CW local structures ***/
 
 typedef struct {
-	const SIGFOX_rc_t *rc;
-#ifdef ASYNCHRONOUS
-	SIGFOX_EP_ADDON_TA_API_progress_status_t progress_status; // Set to 100% when CW is successfully started.
+    const SIGFOX_rc_t *rc;
+#ifdef SIGFOX_EP_ASYNCHRONOUS
+    SIGFOX_EP_ADDON_TA_API_progress_status_t progress_status; // Set to 100% when CW is successfully started.
 #endif
 } SIGFOX_EP_ADDON_TA_CW_context_t;
 
@@ -60,136 +60,141 @@ static SIGFOX_EP_ADDON_TA_CW_context_t sigfox_ep_addon_ta_cw_ctx;
 /*** SIGFOX EP ADDON TA CW functions ***/
 
 /*******************************************************************/
-SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_open(SIGFOX_EP_ADDON_TA_CW_config_t* cw_test_config) {
-	// Local variables.
-#ifdef ERROR_CODES
-	SIGFOX_EP_ADDON_TA_API_status_t status = SIGFOX_EP_ADDON_TA_API_SUCCESS;
+SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_open(SIGFOX_EP_ADDON_TA_CW_config_t *cw_test_config) {
+    // Local variables.
+#ifdef SIGFOX_EP_ERROR_CODES
+    SIGFOX_EP_ADDON_TA_API_status_t status = SIGFOX_EP_ADDON_TA_API_SUCCESS;
 #endif
-#ifdef PARAMETERS_CHECK
-	if (cw_test_config == SFX_NULL) {
-		EXIT_ERROR(SIGFOX_EP_ADDON_TA_API_ERROR_NULL_PARAMETER);
-	}
-	if ((cw_test_config -> rc) == SFX_NULL) {
-		EXIT_ERROR(SIGFOX_EP_ADDON_TA_API_ERROR_NULL_PARAMETER);
-	}
+#ifdef SIGFOX_EP_PARAMETERS_CHECK
+    if (cw_test_config == SIGFOX_NULL) {
+        SIGFOX_EXIT_ERROR(SIGFOX_EP_ADDON_TA_API_ERROR_NULL_PARAMETER);
+    }
+    if ((cw_test_config->rc) == SIGFOX_NULL) {
+        SIGFOX_EXIT_ERROR(SIGFOX_EP_ADDON_TA_API_ERROR_NULL_PARAMETER);
+    }
 #endif
-	// Update local context.
-	sigfox_ep_addon_ta_cw_ctx.rc = (cw_test_config -> rc);
-#ifdef ASYNCHRONOUS
-	sigfox_ep_addon_ta_cw_ctx.progress_status.all = 0;
+    // Update local context.
+    sigfox_ep_addon_ta_cw_ctx.rc = (cw_test_config->rc);
+#ifdef SIGFOX_EP_ASYNCHRONOUS
+    sigfox_ep_addon_ta_cw_ctx.progress_status.all = 0;
 #endif
-#ifdef PARAMETERS_CHECK
+#ifdef SIGFOX_EP_PARAMETERS_CHECK
 errors:
 #endif
-	RETURN();
+    SIGFOX_RETURN();
 }
 
 /*******************************************************************/
-SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_start(SIGFOX_EP_ADDON_TA_API_cw_test_mode_t* cw_test_mode) {
-	// Local variables.
-#ifdef ERROR_CODES
-	SIGFOX_EP_ADDON_TA_API_status_t status = SIGFOX_EP_ADDON_TA_API_SUCCESS;
-	RF_API_status_t rf_api_status = RF_API_SUCCESS;
+SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_start(SIGFOX_EP_ADDON_TA_API_cw_test_mode_t *cw_test_mode) {
+    // Local variables.
+#ifdef SIGFOX_EP_ERROR_CODES
+    SIGFOX_EP_ADDON_TA_API_status_t status = SIGFOX_EP_ADDON_TA_API_SUCCESS;
+    RF_API_status_t rf_api_status = RF_API_SUCCESS;
 #endif
-	RF_API_radio_parameters_t radio_params;
-#ifdef ASYNCHRONOUS
-	// Reset progress status.
-	sigfox_ep_addon_ta_cw_ctx.progress_status.all = 0;
+    RF_API_radio_parameters_t radio_params;
+#ifdef SIGFOX_EP_ASYNCHRONOUS
+    // Reset progress status.
+    sigfox_ep_addon_ta_cw_ctx.progress_status.all = 0;
 #endif
-#ifdef PARAMETERS_CHECK
-	if (cw_test_mode == SFX_NULL) {
-		EXIT_ERROR(SIGFOX_EP_ADDON_TA_API_ERROR_NULL_PARAMETER);
-	}
+#ifdef SIGFOX_EP_PARAMETERS_CHECK
+    if (cw_test_mode == SIGFOX_NULL) {
+        SIGFOX_EXIT_ERROR(SIGFOX_EP_ADDON_TA_API_ERROR_NULL_PARAMETER);
+    }
+#ifndef SIGFOX_EP_UL_BIT_RATE_BPS
+    if ((cw_test_mode -> ul_bit_rate) >= SIGFOX_UL_BIT_RATE_LAST) {
+        SIGFOX_EXIT_ERROR(SIGFOX_EP_ADDON_TA_API_ERROR_UL_BIT_RATE);
+    }
 #endif
-	// Build radio configuration structure.
-	radio_params.rf_mode = RF_API_MODE_TX;
-	radio_params.frequency_hz = ((cw_test_mode -> tx_frequency_hz) != 0) ? (cw_test_mode -> tx_frequency_hz) : ((sigfox_ep_addon_ta_cw_ctx.rc) -> f_ul_hz);
-	radio_params.modulation = (cw_test_mode -> modulation);
-#ifdef UL_BIT_RATE_BPS
-	radio_params.bit_rate_bps = UL_BIT_RATE_BPS;
+#endif
+    // Build radio configuration structure.
+    radio_params.rf_mode = RF_API_MODE_TX;
+    radio_params.frequency_hz = ((cw_test_mode->tx_frequency_hz) != 0) ? (cw_test_mode->tx_frequency_hz) : ((sigfox_ep_addon_ta_cw_ctx.rc)->f_ul_hz);
+    radio_params.modulation = (cw_test_mode->modulation);
+#ifdef SIGFOX_EP_UL_BIT_RATE_BPS
+    radio_params.bit_rate_bps = SIGFOX_EP_UL_BIT_RATE_BPS;
 #else
-	radio_params.bit_rate_bps = (cw_test_mode -> ul_bit_rate);
+    radio_params.bit_rate_bps = SIGFOX_UL_BIT_RATE_BPS_LIST[cw_test_mode -> ul_bit_rate];
 #endif
-#ifdef TX_POWER_DBM_EIRP
-	radio_params.tx_power_dbm_eirp = TX_POWER_DBM_EIRP;
+#ifdef SIGFOX_EP_TX_POWER_DBM_EIRP
+    radio_params.tx_power_dbm_eirp = SIGFOX_EP_TX_POWER_DBM_EIRP;
 #else
-	radio_params.tx_power_dbm_eirp = (cw_test_mode -> tx_power_dbm_eirp);
+    radio_params.tx_power_dbm_eirp = (cw_test_mode->tx_power_dbm_eirp);
 #endif
-#ifdef BIDIRECTIONAL
-	radio_params.deviation_hz = 0;
+#ifdef SIGFOX_EP_BIDIRECTIONAL
+    radio_params.deviation_hz = 0;
 #endif
-	// Wake-up radio.
-#ifdef ERROR_CODES
-	rf_api_status = RF_API_wake_up();
-	RF_API_check_status(SIGFOX_EP_ADDON_TA_API_ERROR_DRIVER_RF_API);
+    // Wake-up radio.
+#ifdef SIGFOX_EP_ERROR_CODES
+    rf_api_status = RF_API_wake_up();
+    RF_API_check_status(SIGFOX_EP_ADDON_TA_API_ERROR_DRIVER_RF_API);
 #else
-	RF_API_wake_up();
+    RF_API_wake_up();
 #endif
-	// Init radio.
-#ifdef ERROR_CODES
-	rf_api_status = RF_API_init(&radio_params);
-	RF_API_check_status(SIGFOX_EP_ADDON_TA_API_ERROR_DRIVER_RF_API);
+    // Init radio.
+#ifdef SIGFOX_EP_ERROR_CODES
+    rf_api_status = RF_API_init(&radio_params);
+    RF_API_check_status(SIGFOX_EP_ADDON_TA_API_ERROR_DRIVER_RF_API);
 #else
-	RF_API_init(&radio_params);
+    RF_API_init(&radio_params);
 #endif
-	// Start continuous wave.
-#ifdef ERROR_CODES
-	rf_api_status = RF_API_start_continuous_wave();
-	RF_API_check_status(SIGFOX_EP_ADDON_TA_API_ERROR_DRIVER_RF_API);
+    // Start continuous wave.
+#ifdef SIGFOX_EP_ERROR_CODES
+    rf_api_status = RF_API_start_continuous_wave();
+    RF_API_check_status(SIGFOX_EP_ADDON_TA_API_ERROR_DRIVER_RF_API);
 #else
-	RF_API_start_continuous_wave();
+    RF_API_start_continuous_wave();
 #endif
-#ifdef ASYNCHRONOUS
-	sigfox_ep_addon_ta_cw_ctx.progress_status.progress = 100;
-	RETURN();
+#ifdef SIGFOX_EP_ASYNCHRONOUS
+    sigfox_ep_addon_ta_cw_ctx.progress_status.progress = 100;
+    SIGFOX_RETURN();
 #endif
-#if (defined PARAMETERS_CHECK) || (defined ERROR_CODES)
+#if (defined SIGFOX_EP_PARAMETERS_CHECK) || (defined SIGFOX_EP_ERROR_CODES)
 errors:
 #endif
-#ifdef ASYNCHRONOUS
-	sigfox_ep_addon_ta_cw_ctx.progress_status.error = 1;
+#ifdef SIGFOX_EP_ASYNCHRONOUS
+    sigfox_ep_addon_ta_cw_ctx.progress_status.error = 1;
 #endif
-	RETURN();
+    SIGFOX_RETURN();
 }
 
 /*******************************************************************/
 SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_stop(void) {
-	// Local variables.
-#ifdef ERROR_CODES
-	SIGFOX_EP_ADDON_TA_API_status_t status = SIGFOX_EP_ADDON_TA_API_SUCCESS;
-	RF_API_status_t rf_api_status = RF_API_SUCCESS;
+    // Local variables.
+#ifdef SIGFOX_EP_ERROR_CODES
+    SIGFOX_EP_ADDON_TA_API_status_t status = SIGFOX_EP_ADDON_TA_API_SUCCESS;
+    RF_API_status_t rf_api_status = RF_API_SUCCESS;
 #endif
-#ifdef ASYNCHRONOUS
-	// Reset progress status.
-	sigfox_ep_addon_ta_cw_ctx.progress_status.all = 0;
+#ifdef SIGFOX_EP_ASYNCHRONOUS
+    // Reset progress status.
+    sigfox_ep_addon_ta_cw_ctx.progress_status.all = 0;
 #endif
-	// Stop continuous wave.
-#ifdef ERROR_CODES
-	rf_api_status = RF_API_de_init();
-	RF_API_check_status(SIGFOX_EP_ADDON_TA_API_ERROR_DRIVER_RF_API);
+    // Stop continuous wave.
+#ifdef SIGFOX_EP_ERROR_CODES
+    rf_api_status = RF_API_de_init();
+    RF_API_check_status(SIGFOX_EP_ADDON_TA_API_ERROR_DRIVER_RF_API);
 #else
-	RF_API_de_init();
+    RF_API_de_init();
 #endif
-	// Turn radio off.
-#ifdef ERROR_CODES
-	rf_api_status = RF_API_sleep();
-	RF_API_check_status(SIGFOX_EP_ADDON_TA_API_ERROR_DRIVER_RF_API);
+    // Turn radio off.
+#ifdef SIGFOX_EP_ERROR_CODES
+    rf_api_status = RF_API_sleep();
+    RF_API_check_status(SIGFOX_EP_ADDON_TA_API_ERROR_DRIVER_RF_API);
 #else
-	RF_API_sleep();
+    RF_API_sleep();
 #endif
-#ifdef ASYNCHRONOUS
-	RETURN();
+#ifdef SIGFOX_EP_ASYNCHRONOUS
+    SIGFOX_RETURN();
 #endif
-#ifdef ERROR_CODES
+#ifdef SIGFOX_EP_ERROR_CODES
 errors:
 #endif
-#ifdef ASYNCHRONOUS
-	sigfox_ep_addon_ta_cw_ctx.progress_status.error = 1;
+#ifdef SIGFOX_EP_ASYNCHRONOUS
+    sigfox_ep_addon_ta_cw_ctx.progress_status.error = 1;
 #endif
-	RETURN();
+    SIGFOX_RETURN();
 }
 
-#ifdef ASYNCHRONOUS
+#ifdef SIGFOX_EP_ASYNCHRONOUS
 /*!******************************************************************
  * \fn SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_CW_get_progress_status(void)
  * \brief Get the progress status.
@@ -198,6 +203,6 @@ errors:
  * \retval      Progress status.
  *******************************************************************/
 SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_CW_get_progress_status(void) {
-	return (sigfox_ep_addon_ta_cw_ctx.progress_status);
+    return (sigfox_ep_addon_ta_cw_ctx.progress_status);
 }
 #endif

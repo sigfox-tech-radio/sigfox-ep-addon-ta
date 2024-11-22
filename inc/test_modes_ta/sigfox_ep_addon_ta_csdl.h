@@ -37,13 +37,13 @@
 #ifndef __SIGFOX_EP_ADDON_TA_CSDL_H__
 #define __SIGFOX_EP_ADDON_TA_CSDL_H__
 
-#ifdef USE_SIGFOX_EP_FLAGS_H
+#ifndef SIGFOX_EP_DISABLE_FLAGS_FILE
 #include "sigfox_ep_flags.h"
 #endif
 #include "sigfox_ep_addon_ta_api.h"
 #include "sigfox_types.h"
 
-#if (defined APPLICATION_MESSAGES) && (defined BIDIRECTIONAL)
+#ifdef SIGFOX_EP_BIDIRECTIONAL
 
 /*** SIGFOX EP ADDON CSDL structures ***/
 
@@ -52,10 +52,10 @@
  * \brief CW test mode driver configuration.
  *******************************************************************/
 typedef struct {
-	const SIGFOX_rc_t *rc;
-#ifdef ASYNCHRONOUS
-	SIGFOX_EP_ADDON_TA_API_process_cb_t process_cb;
-	SIGFOX_EP_ADDON_TA_API_test_mode_cplt_cb internal_cplt_cb;
+    const SIGFOX_rc_t *rc;
+#ifdef SIGFOX_EP_ASYNCHRONOUS
+    SIGFOX_EP_ADDON_TA_API_process_cb_t process_cb;
+    SIGFOX_EP_ADDON_TA_API_test_mode_cplt_cb_t internal_cplt_cb;
 #endif
 } SIGFOX_EP_ADDON_TA_CSDL_config_t;
 
@@ -68,7 +68,7 @@ typedef struct {
  * \param[out]  none
  * \retval      Function execution status.
  *******************************************************************/
-SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSDL_open(SIGFOX_EP_ADDON_TA_CSDL_config_t* csdl_test_config);
+SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSDL_open(SIGFOX_EP_ADDON_TA_CSDL_config_t *csdl_test_config);
 
 /*!******************************************************************
  * \fn SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSDL_execute_test(SIGFOX_EP_ADDON_TA_API_csdl_test_mode_t* csdl_test_mode)
@@ -77,9 +77,9 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSDL_open(SIGFOX_EP_ADDON_TA_
  * \param[out]  none
  * \retval      Function execution status.
  *******************************************************************/
-SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSDL_execute_test(SIGFOX_EP_ADDON_TA_API_csdl_test_mode_t* csdl_test_mode);
+SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSDL_execute_test(SIGFOX_EP_ADDON_TA_API_csdl_test_mode_t *csdl_test_mode);
 
-#ifdef ASYNCHRONOUS
+#ifdef SIGFOX_EP_ASYNCHRONOUS
 /*!******************************************************************
  * \fn SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSDL_process(void)
  * \brief Process continuous Sigfox downlink test mode.
@@ -90,7 +90,7 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSDL_execute_test(SIGFOX_EP_A
 SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSDL_process(void);
 #endif
 
-#ifdef ASYNCHRONOUS
+#ifdef SIGFOX_EP_ASYNCHRONOUS
 /*!******************************************************************
  * \fn SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_CSDL_get_progress_status(void)
  * \brief Get the progress status.
@@ -101,6 +101,6 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSDL_process(void);
 SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_CSDL_get_progress_status(void);
 #endif
 
-#endif /* APPLICATION_MESSAGES and BIDIRECTIONAL */
+#endif /* SIGFOX_EP_APPLICATION_MESSAGES and SIGFOX_EP_BIDIRECTIONAL */
 
 #endif /* __SIGFOX_EP_ADDON_TA_CSDL_H__ */
