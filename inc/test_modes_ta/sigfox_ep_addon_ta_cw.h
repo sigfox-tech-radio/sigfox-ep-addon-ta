@@ -37,7 +37,7 @@
 #ifndef __SIGFOX_EP_ADDON_TA_CW_H__
 #define __SIGFOX_EP_ADDON_TA_CW_H__
 
-#ifdef USE_SIGFOX_EP_FLAGS_H
+#ifndef SIGFOX_EP_DISABLE_FLAGS_FILE
 #include "sigfox_ep_flags.h"
 #endif
 #include "sigfox_ep_addon_ta_api.h"
@@ -51,7 +51,7 @@
  * \brief CW test mode driver configuration.
  *******************************************************************/
 typedef struct {
-	const SIGFOX_rc_t *rc;
+    const SIGFOX_rc_t *rc;
 } SIGFOX_EP_ADDON_TA_CW_config_t;
 
 /*** SIGFOX EP ADDON TA CW functions ***/
@@ -63,7 +63,7 @@ typedef struct {
  * \param[out]  none
  * \retval      Function execution status.
  *******************************************************************/
-SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_open(SIGFOX_EP_ADDON_TA_CW_config_t* cw_test_config);
+SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_open(SIGFOX_EP_ADDON_TA_CW_config_t *cw_test_config);
 
 /*!******************************************************************
  * \fn SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_start(SIGFOX_EP_ADDON_TA_API_cw_test_mode_t* cw_test_mode)
@@ -72,7 +72,7 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_open(SIGFOX_EP_ADDON_TA_CW
  * \param[out]  none
  * \retval      Function execution status.
  *******************************************************************/
-SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_start(SIGFOX_EP_ADDON_TA_API_cw_test_mode_t* cw_test_mode);
+SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_start(SIGFOX_EP_ADDON_TA_API_cw_test_mode_t *cw_test_mode);
 
 /*!******************************************************************
  * \fn SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_stop(void)
@@ -83,7 +83,7 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_start(SIGFOX_EP_ADDON_TA_A
  *******************************************************************/
 SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_stop(void);
 
-#ifdef ASYNCHRONOUS
+#ifdef SIGFOX_EP_ASYNCHRONOUS
 /*!******************************************************************
  * \fn SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_CW_get_progress_status(void)
  * \brief Get the progress status.
