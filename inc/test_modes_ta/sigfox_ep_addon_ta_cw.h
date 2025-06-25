@@ -44,6 +44,8 @@
 #include "manuf/rf_api.h"
 #include "sigfox_types.h"
 
+#ifdef SIGFOX_EP_CERTIFICATION
+
 /*** SIGFOX EP ADDON TA CW structures ***/
 
 /*!******************************************************************
@@ -93,5 +95,7 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CW_stop(void);
  *******************************************************************/
 SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_CW_get_progress_status(void);
 #endif
+
+#endif /* SIGFOX_EP_CERTIFICATION */
 
 #endif /* __SIGFOX_EP_ADDON_TA_CW_H__ */

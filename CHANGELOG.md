@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.1](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v2.1) - 25 Jun 2025
+
+### Changed
+
+* Remove **#error directive** when `SIGFOX_EP_CERTIFICATION` is not defined, so that the addon can be removed via compilation flags when not used (switch between test and production firmware for example).
+
 ## [v2.0](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v2.0) - 22 Nov 2024
 
 ### Added
