@@ -43,6 +43,8 @@
 #include "sigfox_ep_addon_ta_api.h"
 #include "sigfox_types.h"
 
+#ifdef SIGFOX_EP_CERTIFICATION
+
 /*** SIGFOX EP ADDON CSUL structures ***/
 
 /*!******************************************************************
@@ -98,5 +100,7 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSUL_process(void);
  *******************************************************************/
 SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_CSUL_get_progress_status(void);
 #endif
+
+#endif /* SIGFOX_EP_CERTIFICATION */
 
 #endif /* __SIGFOX_EP_ADDON_TA_CSUL_H__ */

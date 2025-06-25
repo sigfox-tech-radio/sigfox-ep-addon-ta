@@ -45,7 +45,7 @@
 #include "sigfox_error.h"
 #include "sigfox_ep_api_test.h"
 
-#ifdef SIGFOX_EP_BIDIRECTIONAL
+#if ((defined SIGFOX_EP_CERTIFICATION) && (defined SIGFOX_EP_BIDIRECTIONAL))
 
 /*** SIGFOX EP ADDON CSDL local structures ***/
 
@@ -461,4 +461,4 @@ SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_CSDL_get_progress_st
 }
 #endif
 
-#endif /* SIGFOX_EP_APPLICATION_MESSAGES and SIGFOX_EP_BIDIRECTIONAL */
+#endif /* SIGFOX_EP_CERTIFICATION and SIGFOX_EP_BIDIRECTIONAL */

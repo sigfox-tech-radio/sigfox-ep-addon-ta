@@ -46,6 +46,8 @@
 #include "sigfox_error.h"
 #include "sigfox_ep_api_test.h"
 
+#ifdef SIGFOX_EP_CERTIFICATION
+
 /*** SIGFOX EP ADDON CSUL local macros ***/
 
 #define SIGFOX_EP_ADDON_TA_CSUL_INTERFRAME_TIMER_MS         200 // In order to comply with the 20s FCC specification.
@@ -53,7 +55,7 @@
 #define SIGFOX_EP_ADDON_TA_CSUL_PN7_TAP                     6
 #define SIGFOX_EP_ADDON_TA_CSUL_PN7_LENGTH                  7
 #define SIGFOX_EP_ADDON_TA_CSUL_PN7_MASK                    0x007F
-#define SIGFOX_EP_ADDON_TA_CSUL_PN7_OFFSET                  ((SIGFOX_EP_ADDON_TA_CSUL_PN7_MASK - SIGFOX_FH_MICRO_CHANNEL_NUMBER) / 2)
+#define SIGFOX_EP_ADDON_TA_CSUL_PN7_OFFSET                  ((SIGFOX_EP_ADDON_TA_CSUL_PN7_MASK - SIGFOX_FH_MICRO_CHANNEL_NUMBER) >> 1)
 
 #define SIGFOX_EP_ADDON_TA_CSUL_RANDOM_VALUE_SIZE_BITS      7
 #define SIGFOX_EP_ADDON_TA_CSUL_RANDOM_VALUE_MASK           ((1 << SIGFOX_EP_ADDON_TA_CSUL_RANDOM_VALUE_SIZE_BITS) - 1)
@@ -216,12 +218,12 @@ static void _compute_new_random_micro_channel(void) {
     sfx_u16 shift_reg = (sfx_u16) (sigfox_ep_addon_ta_csul_ctx.micro_channel_index + SIGFOX_EP_ADDON_TA_CSUL_PN7_OFFSET);
     // Compute minimum and maximum values.
     if (((sigfox_ep_addon_ta_csul_ctx.test_mode_ptr)->frequency_hopping_mode) == SIGFOX_EP_ADDON_TA_API_FH_MODE_ALL_MACRO_CHANNELS) {
-        min = SIGFOX_EP_ADDON_TA_CSUL_PN7_OFFSET;
-        max = (min + SIGFOX_FH_MICRO_CHANNEL_NUMBER - 1);
+        min = (sfx_u16) SIGFOX_EP_ADDON_TA_CSUL_PN7_OFFSET;
+        max = (sfx_u16) (min + SIGFOX_FH_MICRO_CHANNEL_NUMBER - 1);
     }
     else {
-        min = SIGFOX_EP_ADDON_TA_CSUL_PN7_OFFSET + (SIGFOX_FH_MICRO_CHANNEL_PER_MACRO_CHANNEL_OPERATED * sigfox_ep_addon_ta_csul_ctx.operated_macro_channel_index);
-        max = (min + SIGFOX_FH_MICRO_CHANNEL_PER_MACRO_CHANNEL_OPERATED - 1);
+        min = (sfx_u16) (SIGFOX_EP_ADDON_TA_CSUL_PN7_OFFSET + (SIGFOX_FH_MICRO_CHANNEL_PER_MACRO_CHANNEL_OPERATED * sigfox_ep_addon_ta_csul_ctx.operated_macro_channel_index));
+        max = (sfx_u16) (min + SIGFOX_FH_MICRO_CHANNEL_PER_MACRO_CHANNEL_OPERATED - 1);
     }
     // Loop until value is in the range.
     do {
@@ -296,7 +298,7 @@ static SIGFOX_EP_ADDON_TA_API_status_t _send_uplink_frame(void) {
         micro_channel_center_frequency_hz += (SIGFOX_FH_MICRO_CHANNEL_WIDTH_HZ * sigfox_ep_addon_ta_csul_ctx.micro_channel_index);
         micro_channel_center_frequency_hz += (sigfox_ep_addon_ta_csul_ctx.micro_channel_index / SIGFOX_FH_MICRO_CHANNEL_PER_MACRO_CHANNEL_OPERATED) * SIGFOX_FH_MICRO_CHANNEL_HOP;
         // Compute absolute signal frequency.
-        test_params.tx_frequency_hz = (micro_channel_center_frequency_hz - (SIGFOX_FH_MICRO_CHANNEL_OPERATED_WIDTH_HZ / 2) + sigfox_ep_addon_ta_csul_ctx.baseband_frequency_hz);
+        test_params.tx_frequency_hz = (micro_channel_center_frequency_hz - (SIGFOX_FH_MICRO_CHANNEL_OPERATED_WIDTH_HZ >> 1) + sigfox_ep_addon_ta_csul_ctx.baseband_frequency_hz);
     }
 #endif
 #ifdef SIGFOX_EP_BIDIRECTIONAL
@@ -666,7 +668,7 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSUL_process(void) {
     }
 #ifdef SIGFOX_EP_ASYNCHRONOUS
     // Compute progress status.
-    sigfox_ep_addon_ta_csul_ctx.progress_status.progress = ((sigfox_ep_addon_ta_csul_ctx.ul_frame_count * 100) / ((sigfox_ep_addon_ta_csul_ctx.test_mode_ptr)->number_of_frames));
+    sigfox_ep_addon_ta_csul_ctx.progress_status.progress = (((sigfox_ep_addon_ta_csul_ctx.ul_frame_count * 100) / ((sigfox_ep_addon_ta_csul_ctx.test_mode_ptr)->number_of_frames)) & 0x7F);
     // Reset process flag.
     sigfox_ep_addon_ta_csul_ctx.internal_flags.field.process_running = 0;
     SIGFOX_RETURN();
@@ -695,3 +697,5 @@ SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_CSUL_get_progress_st
     return (sigfox_ep_addon_ta_csul_ctx.progress_status);
 }
 #endif
+
+#endif /* SIGFOX_EP_CERTIFICATION */

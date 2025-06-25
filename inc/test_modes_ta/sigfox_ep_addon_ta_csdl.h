@@ -43,7 +43,7 @@
 #include "sigfox_ep_addon_ta_api.h"
 #include "sigfox_types.h"
 
-#ifdef SIGFOX_EP_BIDIRECTIONAL
+#if ((defined SIGFOX_EP_CERTIFICATION) && (defined SIGFOX_EP_BIDIRECTIONAL))
 
 /*** SIGFOX EP ADDON CSDL structures ***/
 
@@ -101,6 +101,6 @@ SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_CSDL_process(void);
 SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_CSDL_get_progress_status(void);
 #endif
 
-#endif /* SIGFOX_EP_APPLICATION_MESSAGES and SIGFOX_EP_BIDIRECTIONAL */
+#endif /* SIGFOX_EP_CERTIFICATION and SIGFOX_EP_BIDIRECTIONAL */
 
 #endif /* __SIGFOX_EP_ADDON_TA_CSDL_H__ */

@@ -44,6 +44,8 @@
 #include "sigfox_types.h"
 #include "sigfox_error.h"
 
+#ifdef SIGFOX_EP_CERTIFICATION
+
 /*** SIGFOX EP ADDON TA CW local structures ***/
 
 typedef struct {
@@ -206,3 +208,5 @@ SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_CW_get_progress_stat
     return (sigfox_ep_addon_ta_cw_ctx.progress_status);
 }
 #endif
+
+#endif /* SIGFOX_EP_CERTIFICATION */

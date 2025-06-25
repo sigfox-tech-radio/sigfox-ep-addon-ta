@@ -43,6 +43,8 @@
 #include "manuf/rf_api.h"
 #include "sigfox_types.h"
 
+#ifdef SIGFOX_EP_CERTIFICATION
+
 /*** SIGFOX EP ADDON TA API structures ***/
 
 #ifdef SIGFOX_EP_ERROR_CODES
@@ -285,8 +287,6 @@ SIGFOX_EP_ADDON_TA_API_progress_status_t SIGFOX_EP_ADDON_TA_API_get_progress_sta
 SIGFOX_EP_ADDON_TA_API_status_t SIGFOX_EP_ADDON_TA_API_get_version(sfx_u8 **version, sfx_u8 *version_size_char);
 #endif
 
-#ifndef SIGFOX_EP_CERTIFICATION
-#error "SIGFOX_EP_CERTIFICATION flag must be defined to use this type approval addon"
-#endif
+#endif /* SIGFOX_EP_CERTIFICATION */
 
 #endif /* __SIGFOX_EP_ADDON_TA_API_H__ */
