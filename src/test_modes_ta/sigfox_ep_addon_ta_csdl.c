@@ -169,6 +169,7 @@ static SIGFOX_EP_ADDON_TA_API_status_t _start_downlink_window(void) {
     test_params.flags.all = 0;
     test_params.flags.field.dl_enable = 1;
     test_params.tx_frequency_hz = 0;
+    test_params.ul_bitstream_byte = 0x00;
     test_params.dl_t_w_ms = 0;
     test_params.dl_t_rx_ms = ((sigfox_ep_addon_ta_csdl_ctx.test_mode_ptr)->dl_t_rx_ms);
     test_params.rx_frequency_hz = ((sigfox_ep_addon_ta_csdl_ctx.test_mode_ptr)->rx_frequency_hz);

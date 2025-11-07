@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.0](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v3.0) - 07 Nov 2025
+
+### Changed
+
+* Upgrade to **sigfox-ep-lib v4.3**.
+* Use **short message and long message** naming in frequency hopping modes enumeration.
+
 ## [v2.1](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v2.1) - 25 Jun 2025
 
 ### Changed

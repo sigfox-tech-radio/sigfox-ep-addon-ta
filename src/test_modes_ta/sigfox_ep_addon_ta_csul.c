@@ -217,7 +217,7 @@ static void _compute_new_random_micro_channel(void) {
     sfx_u16 max = 0;
     sfx_u16 shift_reg = (sfx_u16) (sigfox_ep_addon_ta_csul_ctx.micro_channel_index + SIGFOX_EP_ADDON_TA_CSUL_PN7_OFFSET);
     // Compute minimum and maximum values.
-    if (((sigfox_ep_addon_ta_csul_ctx.test_mode_ptr)->frequency_hopping_mode) == SIGFOX_EP_ADDON_TA_API_FH_MODE_ALL_MACRO_CHANNELS) {
+    if (((sigfox_ep_addon_ta_csul_ctx.test_mode_ptr)->frequency_hopping_mode) == SIGFOX_EP_ADDON_TA_API_FH_MODE_LONG_MESSAGE) {
         min = (sfx_u16) SIGFOX_EP_ADDON_TA_CSUL_PN7_OFFSET;
         max = (sfx_u16) (min + SIGFOX_FH_MICRO_CHANNEL_NUMBER - 1);
     }
@@ -286,6 +286,8 @@ static SIGFOX_EP_ADDON_TA_API_status_t _send_uplink_frame(void) {
     // Set test parameters.
     test_params.flags.all = 0;
     test_params.flags.field.ul_enable = 1;
+    test_params.flags.field.ul_bitstream_enable = 1;
+    test_params.ul_bitstream_byte = 0x00;
     test_params.tx_frequency_hz = ((sigfox_ep_addon_ta_csul_ctx.test_mode_ptr)->tx_frequency_hz);
 #ifdef SIGFOX_EP_SPECTRUM_ACCESS_FH
     // Overwrite EP library frequency generator when using FH spectrum access.

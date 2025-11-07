@@ -107,8 +107,8 @@ typedef struct {
  * \brief Sigfox ADDON TA API frequency hopping modes for continuous Sigfox uplink.
  *******************************************************************/
 typedef enum {
-    SIGFOX_EP_ADDON_TA_API_FH_MODE_SIGFOX_MACRO_CHANNEL_ONLY = 0,
-    SIGFOX_EP_ADDON_TA_API_FH_MODE_ALL_MACRO_CHANNELS,
+    SIGFOX_EP_ADDON_TA_API_FH_MODE_SHORT_MESSAGE = 0,
+    SIGFOX_EP_ADDON_TA_API_FH_MODE_LONG_MESSAGE,
     SIGFOX_EP_ADDON_TA_API_FH_MODE_LAST
 } SIGFOX_EP_ADDON_TA_API_fh_mode_t;
 #endif
