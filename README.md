@@ -8,9 +8,10 @@ The table below shows the versions **compatibility** between this addon and the 
 
 | **EP_ADDON_TA** | **EP_LIB** |
 |:---:|:---:|
-| [v2.1](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v2.1) | >= [v4.0](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v4.0) |
-| [v2.0](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v2.0) | >= [v4.0](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v4.0) |
-| [v1.1](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v1.1) | [v3.5](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v3.5) to [v3.6](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v3.6)|
+| [v3.0](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v3.0) | >= [v4.2](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v4.2) |
+| [v2.1](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v2.1) | [v4.0](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v4.0) to [v4.1](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v4.1) |
+| [v2.0](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v2.0) | [v4.0](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v4.0) to [v4.1](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v4.1) |
+| [v1.1](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v1.1) | [v3.5](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v3.5) to [v3.6](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v3.6) |
 | [v1.0](https://github.com/sigfox-tech-radio/sigfox-ep-addon-ta/releases/tag/v1.0) | [v3.4](https://github.com/sigfox-tech-radio/sigfox-ep-lib/releases/tag/v3.4) |
 
 The application is divided into three modes detailed thereafter.
@@ -21,7 +22,7 @@ After implementing the corresponding RF_API functions, this mode generates a **c
 
 ### Continuous Sigfox uplink (CSUL)
 
-This mode continuously sends a configurable number of **Sigfox uplink frames**. In the particular case of FCC certification in RC2 and RC4 zones, the `SIGFOX_EP_ADDON_TA_API_FH_MODE_ALL_MACRO_CHANNELS` option (equivalent to the **LONG_MESSAGE** configuration of the old Sigfox library) is helpful to send Sigfox messages in all FCC macro channels and perform the related tests.
+This mode continuously sends a configurable number of **Sigfox uplink frames**. In the particular case of FCC certification in RC2 and RC4 zones, the `SIGFOX_EP_ADDON_TA_API_FH_MODE_LONG_MESSAGE` option is helpful to send Sigfox messages in all FCC macro channels and perform the related tests.
 
 ### Continuous Sigfox downlink (CSDL)
 
